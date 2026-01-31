@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XionTrade</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">XionTrade</h1>
+                    <div class="header-status">
+                        <span class="status-dot active"></span>
+                        <span class="status-text">Running</span>
+                    </div>
+                    <a href="https://github.com/beastdzns/TeamXion_risk_aware_trading" target="_blank"
+                        class="header-link" title="Visit Project on GitHub">
+                        <i class="bi bi-github"></i>
+                        <span class="header-link-text">GitHub</span>
+                    </a>
+                </div>
+                <div class="header-right">
+                    <div class="update-indicator" id="updateIndicator" style="display: none;">
+                        <button class="btn-icon update-btn" id="checkUpdateBtn" title="Check for Updates">
+                            <i class="bi bi-arrow-up-circle"></i>
+                        </button>
+                    </div>
+                    <button class="btn-icon" id="refreshBtn" title="Refresh">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <button class="btn-secondary" id="settingsBtn">
+                        <i class="bi bi-gear"></i>
+                        Settings
+                    </button>
+                    <button class="btn-secondary" id="portfolioAdvisorBtn">
+                        <i class="bi bi-pie-chart"></i>
+                        Portfolio Advisor
+                    </button>
+                    <button class="btn-secondary" id="addApiProviderBtn">
+                        <i class="bi bi-cloud-plus"></i>
+                        API Providers
+                    </button>
+                    <button class="btn-primary" id="addModelBtn">
+                        <i class="bi bi-plus-lg"></i>
+                        Add Model
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="app-body">
+            <!-- Sidebar -->
+            <aside class="app-sidebar">
+                <div class="sidebar-section">
+                    <div class="section-header">
+                        <span>Trading Models</span>
+                    </div>
+                    <div id="modelList" class="model-list"></div>
+                </div>
+                <div class="sidebar-section">
+                    <div class="section-header">
+                        <span>Market Prices</span>
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <div id="marketPrices" class="market-prices"></div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="app-main">
+                <!-- Stats Cards -->
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Total Account Value</span>
+                            <i class="bi bi-wallet2 text-primary"></i>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Available Cash</span>
+                            <i class="bi bi-cash text-success"></i>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Realized P&L</span>
+                            <i class="bi bi-graph-up text-info"></i>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">Unrealized P&L</span>
+                            <i class="bi bi-graph-down text-warning"></i>
+                        </div>
+                        <div class="stat-value">$0.00</div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Account Value Trend</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="accountChart" style="width: 100%; height: 300px;"></div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="content-card">
+                    <div class="card-tabs">
+                        <button class="tab-btn active" data-tab="positions">Positions</button>
+                        <button class="tab-btn" data-tab="trades">Trades</button>
+                        <button class="tab-btn" data-tab="conversations">AI Conversations</button>
+                    </div>
+
+                    <div class="tab-content active" id="positionsTab">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Symbol</th>
+                                        <th>Side</th>
+                                        <th>Amount</th>
+                                        <th>Entry Price</th>
+                                        <th>Current Price</th>
+                                        <th>Leverage</th>
+                                        <th>P&L</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="positionsBody">
+                                    <tr>
+                                        <td colspan="7" class="empty-state">No positions</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tradesTab">
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Symbol</th>
+                                        <th>Action</th>
+                                        <th>Amount</th>
+                                        <th>Price</th>
+                                        <th>P&L</th>
+                                        <th>Fee</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tradesBody">
+                                    <tr>
+                                        <td colspan="6" class="empty-state">No trades yet</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="conversationsTab">
+                        <div id="conversationsBody" class="conversations-list">
+                            <div class="empty-state">No conversation history</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- API Provider Modal -->
+    <div class="modal" id="apiProviderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>API Provider Management</h3>
+                <button class="btn-close" id="closeApiProviderModalBtn">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>API Name</label>
+                    <input type="text" id="providerName" placeholder="e.g., OpenAI" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>API URL</label>
+                    <input type="text" id="providerApiUrl" placeholder="https://api.openai.com" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>API Key</label>
+                    <input type="password" id="providerApiKey" placeholder="sk-..." class="form-input">
+                </div>
+                <div class="form-group">
+                    <label>Available Models</label>
+                    <div class="model-input-group">
+                        <input type="text" id="availableModels" placeholder="gpt-4, gpt-3.5-turbo" class="form-input">
+                        <button type="button" class="btn-secondary" id="fetchModelsBtn">
+                            <i class="bi bi-arrow-clockwise"></i> Fetch Models
+                        </button>
+                    </div>
+                    <small class="form-help">Manually enter model names separated by commas, or click Fetch Models
+                        button to automatically retrieve</small>
+                </div>
+                <div class="form-group">
+                    <label>Saved API Providers</label>
+                    <div id="providerList" class="provider-list"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelApiProviderBtn">Cancel</button>
+                <button class="btn-primary" id="saveApiProviderBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Model Modal -->
+    <div class="modal" id="addModelModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Trading Model</h3>
+                <button class="btn-close" id="closeModalBtn">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select API Provider</label>
+                    <select id="modelProvider" class="form-input">
+                        <option value="">Please add an API provider first</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Model</label>
+                    <select id="modelIdentifier" class="form-input">
+                        <option value="">Please select an API provider</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Model Display Name</label>
+                    <input type="text" id="modelName" placeholder="e.g., GPT-4 Trader" class="form-input">
+                    <small class="form-help">Friendly name for display</small>
+                </div>
+                <div class="form-group">
+                    <label>Initial Capital</label>
+                    <input type="number" id="initialCapital" value="100000" class="form-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelBtn">Cancel</button>
+                <button class="btn-primary" id="submitBtn">Add Model</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>System Settings</h3>
+                <button class="btn-close" id="closeSettingsModalBtn">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Trading Frequency (minutes)</label>
+                    <input type="number" id="tradingFrequency" min="1" max="1440" class="form-input" placeholder="60">
+                    <small class="form-help">Set the time interval for AI trading decisions (1-1440 minutes)</small>
+                </div>
+                <div class="form-group">
+                    <label>Trading Fee Rate</label>
+                    <input type="number" id="tradingFeeRate" min="0" max="0.01" step="0.0001" class="form-input"
+                        placeholder="0.001">
+                    <small class="form-help">Transaction fee rate for each trade (0-0.01, e.g., 0.001 = 0.1%)</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelSettingsBtn">Cancel</button>
+                <button class="btn-primary" id="saveSettingsBtn">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Notification Modal -->
+    <div class="modal" id="updateModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>
+                    <i class="bi bi-cloud-download text-info"></i>
+                    New Version Available
+                </h3>
+                <button class="btn-close" id="closeUpdateModalBtn">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="update-info">
+                    <div class="update-version">
+                        <div class="current-version">
+                            <i class="bi bi-cpu"></i>
+                            <span>Current Version:</span>
+                            <strong id="currentVersion">v1.0.0</strong>
+                        </div>
+                        <div class="arrow-down">
+                            <i class="bi bi-arrow-down"></i>
+                        </div>
+                        <div class="latest-version">
+                            <i class="bi bi-gem"></i>
+                            <span>Latest Version:</span>
+                            <strong id="latestVersion" class="text-success">v1.1.0</strong>
+                        </div>
+                    </div>
+                    <div class="update-notes">
+                        <div class="notes-header">
+                            <i class="bi bi-journal-text"></i>
+                            <span>Release Notes</span>
+                        </div>
+                        <div id="releaseNotes" class="notes-content">
+                            <p>New features and improvements will be displayed here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="dismissUpdateBtn">Remind Later</button>
+                <a href="#" id="githubLink" class="btn-primary" target="_blank">
+                    <i class="bi bi-github"></i>
+                    Go to GitHub
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Portfolio Advisor Modal -->
+    <div class="modal" id="portfolioAdvisorModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>
+                    <i class="bi bi-pie-chart"></i>
+                    Portfolio Advisor
+                </h3>
+                <button class="btn-close" id="closePortfolioAdvisorModalBtn">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Portfolio Input Section -->
+                <div class="portfolio-input-section" id="portfolioInputSection">
+                    <div class="section-title">
+                        <h4>Your Portfolio</h4>
+                        <button class="btn-secondary btn-sm" id="addPortfolioRowBtn">
+                            <i class="bi bi-plus-circle"></i> Add Asset
+                        </button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table portfolio-table">
+                            <thead>
+                                <tr>
+                                    <th>Symbol</th>
+                                    <th>Quantity</th>
+                                    <th>Purchase Price</th>
+                                    <th>Current Price</th>
+                                    <th>Value</th>
+                                    <th>Return</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="portfolioTableBody">
+                                <tr class="portfolio-input-row">
+                                    <td><input type="text" class="form-input portfolio-symbol" placeholder="BTC"
+                                            value="BTC"></td>
+                                    <td><input type="number" class="form-input portfolio-quantity" placeholder="0.0"
+                                            value="2" step="0.0001"></td>
+                                    <td><input type="number" class="form-input portfolio-cost" placeholder="0"
+                                            value="40000" step="0.01"></td>
+                                    <td><input type="number" class="form-input portfolio-current" placeholder="Auto"
+                                            step="0.01" readonly></td>
+                                    <td class="portfolio-value">$0.00</td>
+                                    <td class="portfolio-return">0.00%</td>
+                                    <td>
+                                        <button class="btn-icon btn-danger remove-portfolio-row" title="Remove">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="portfolio-summary">
+                        <div class="summary-item">
+                            <span class="summary-label">Total Value:</span>
+                            <span class="summary-value" id="portfolioTotalValue">$0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Total Cost:</span>
+                            <span class="summary-value" id="portfolioTotalCost">$0.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="summary-label">Total Return:</span>
+                            <span class="summary-value" id="portfolioTotalReturn">0.00%</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select AI Provider</label>
+                        <select id="portfolioAnalysisProvider" class="form-input">
+                            <option value="">Please select a provider</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Select Model</label>
+                        <select id="portfolioAnalysisModel" class="form-input">
+                            <option value="">Please select a provider first</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Analysis Results Section (Hidden by default) -->
+                <div class="portfolio-results-section" id="portfolioResultsSection" style="display: none;">
+                    <div class="section-title">
+                        <h4>Analysis Results</h4>
+                        <button class="btn-secondary btn-sm" id="backToInputBtn">
+                            <i class="bi bi-arrow-left"></i> Edit Portfolio
+                        </button>
+                    </div>
+
+                    <!-- Risk & Diversification Cards -->
+                    <div class="analysis-cards">
+                        <div class="analysis-card risk-card">
+                            <div class="card-icon">
+                                <i class="bi bi-shield-exclamation"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-label">Risk Score</div>
+                                <div class="card-value" id="riskScore">0</div>
+                                <div class="card-progress">
+                                    <div class="progress-bar" id="riskProgressBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="analysis-card diversification-card">
+                            <div class="card-icon">
+                                <i class="bi bi-pie-chart-fill"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="card-label">Diversification Score</div>
+                                <div class="card-value" id="diversificationScore">0</div>
+                                <div class="card-progress">
+                                    <div class="progress-bar" id="diversificationProgressBar"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations Section -->
+                    <div class="results-section">
+                        <h5><i class="bi bi-lightbulb"></i> Rebalancing Recommendations</h5>
+                        <div id="recommendationsList" class="recommendations-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <!-- New Opportunities Section -->
+                    <div class="results-section">
+                        <h5><i class="bi bi-stars"></i> New Investment Opportunities</h5>
+                        <div id="opportunitiesList" class="opportunities-list">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <!-- AI Reasoning Section -->
+                    <div class="results-section">
+                        <h5><i class="bi bi-chat-dots"></i> AI Analysis</h5>
+                        <div id="aiReasoning" class="ai-reasoning">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelPortfolioAdvisorBtn">Cancel</button>
+                <button class="btn-primary" id="analyzePortfolioBtn">
+                    <i class="bi bi-cpu"></i>
+                    Analyze Portfolio
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
