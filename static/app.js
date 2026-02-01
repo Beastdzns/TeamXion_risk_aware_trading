@@ -107,6 +107,11 @@ class TradingApp {
         document.getElementById('analyzePortfolioBtn').addEventListener('click', () => this.submitPortfolioAnalysis());
         document.getElementById('backToInputBtn').addEventListener('click', () => this.backToPortfolioInput());
         document.getElementById('portfolioAnalysisProvider').addEventListener('change', (e) => this.updatePortfolioModelOptions(e.target.value));
+
+        // Chart Filter Buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.switchChartPeriod(e.target.dataset.period));
+        });
     }
 
     async loadModels() {
@@ -651,6 +656,20 @@ class TradingApp {
 
         document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
         document.getElementById(`${tabName}Tab`).classList.add('active');
+    }
+
+    switchChartPeriod(period) {
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`[data-period="${period}"]`).classList.add('active');
+
+        // Note: Currently the chart shows all available data
+        // In a future update, this could filter the data by time period
+        // For now, we just update the UI to show the button is clickable
+        console.log(`Chart period switched to: ${period}`);
+
+        // Optionally reload the chart data with the new period
+        // This would require backend support to filter by time period
     }
 
     // API Provider Methods
