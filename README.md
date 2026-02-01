@@ -137,10 +137,4 @@ All data stored locally in SQLite. No external tracking. API calls only to marke
 
 ---
 
-## 📝 License
-
-MIT License - See LICENSE file for details.
-
----
-
 **XION TRADE - Intelligent, Adaptive, Risk-Aware Portfolio Management 🚀📈**
