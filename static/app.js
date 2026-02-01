@@ -116,7 +116,7 @@ class TradingApp {
 
     async loadModels() {
         try {
-            const response = await fetch('/api/models');
+            const response = await fetch(API_CONFIG.getApiUrl('/api/models'));
             const models = await response.json();
             this.renderModels(models);
 
@@ -188,9 +188,9 @@ class TradingApp {
 
         try {
             const [portfolio, trades, conversations] = await Promise.all([
-                fetch(`/api/models/${this.currentModelId}/portfolio`).then(r => r.json()),
-                fetch(`/api/models/${this.currentModelId}/trades?limit=50`).then(r => r.json()),
-                fetch(`/api/models/${this.currentModelId}/conversations?limit=20`).then(r => r.json())
+                fetch(API_CONFIG.getApiUrl(`/api/models/${this.currentModelId}/portfolio`)).then(r => r.json()),
+                fetch(API_CONFIG.getApiUrl(`/api/models/${this.currentModelId}/trades?limit=50`)).then(r => r.json()),
+                fetch(API_CONFIG.getApiUrl(`/api/models/${this.currentModelId}/conversations?limit=20`)).then(r => r.json())
             ]);
 
             this.updateStats(portfolio.portfolio, false);
@@ -205,7 +205,7 @@ class TradingApp {
 
     async loadAggregatedData() {
         try {
-            const response = await fetch('/api/aggregated/portfolio');
+            const response = await fetch(API_CONFIG.getApiUrl('/api/aggregated/portfolio'));
             const data = await response.json();
 
             this.updateStats(data.portfolio, true);
@@ -613,7 +613,7 @@ class TradingApp {
     async loadMarketPrices() {
         try {
             // Use WebSocket-cached real-time prices for instant updates
-            const response = await fetch('/api/market/prices/realtime');
+            const response = await fetch(API_CONFIG.getApiUrl('/api/market/prices/realtime'));
             const prices = await response.json();
 
             // Log source for debugging (optional - can be removed later)
@@ -704,7 +704,7 @@ class TradingApp {
         }
 
         try {
-            const response = await fetch('/api/providers', {
+            const response = await fetch(API_CONFIG.getApiUrl('/api/providers'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -736,7 +736,7 @@ class TradingApp {
         fetchBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/providers/models', {
+            const response = await fetch(API_CONFIG.getApiUrl('/api/providers/models'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ api_url: apiUrl, api_key: apiKey })
@@ -764,7 +764,7 @@ class TradingApp {
 
     async loadProviders() {
         try {
-            const response = await fetch('/api/providers');
+            const response = await fetch(API_CONFIG.getApiUrl('/api/providers'));
             const providers = await response.json();
             this.providers = providers;
             this.renderProviders(providers);
@@ -852,7 +852,7 @@ class TradingApp {
         if (!confirm('Are you sure you want to delete this API provider?')) return;
 
         try {
-            const response = await fetch(`/api/providers/${providerId}`, {
+            const response = await fetch(API_CONFIG.getApiUrl(`/api/providers/${providerId}`), {
                 method: 'DELETE'
             });
 
@@ -886,7 +886,7 @@ class TradingApp {
         }
 
         try {
-            const response = await fetch('/api/models', {
+            const response = await fetch(API_CONFIG.getApiUrl('/api/models'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -912,7 +912,7 @@ class TradingApp {
         if (!confirm('Are you sure you want to delete this model?')) return;
 
         try {
-            const response = await fetch(`/api/models/${modelId}`, {
+            const response = await fetch(API_CONFIG.getApiUrl(`/api/models/${modelId}`), {
                 method: 'DELETE'
             });
 
@@ -968,7 +968,7 @@ class TradingApp {
 
     async showSettingsModal() {
         try {
-            const response = await fetch('/api/settings');
+            const response = await fetch(API_CONFIG.getApiUrl('/api/settings'));
             const settings = await response.json();
 
             document.getElementById('tradingFrequency').value = settings.trading_frequency_minutes;
@@ -1000,7 +1000,7 @@ class TradingApp {
         }
 
         try {
-            const response = await fetch('/api/settings', {
+            const response = await fetch(API_CONFIG.getApiUrl('/api/settings'), {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1025,7 +1025,7 @@ class TradingApp {
 
     async checkForUpdates(silent = false) {
         try {
-            const response = await fetch('/api/check-update');
+            const response = await fetch(API_CONFIG.getApiUrl('/api/check-update'));
             const data = await response.json();
 
             if (data.update_available) {
@@ -1147,7 +1147,7 @@ class TradingApp {
 
     async loadProvidersForPortfolio() {
         try {
-            const response = await fetch('/api/providers');
+            const response = await fetch(API_CONFIG.getApiUrl('/api/providers'));
             const providers = await response.json();
             this.portfolioProviders = providers;
 
@@ -1252,7 +1252,7 @@ class TradingApp {
         let prices = {};
         if (symbols.length > 0) {
             try {
-                const response = await fetch('/api/market/prices');
+                const response = await fetch(API_CONFIG.getApiUrl('/api/market/prices'));
                 const marketData = await response.json();
                 prices = marketData;
             } catch (error) {
@@ -1346,7 +1346,7 @@ class TradingApp {
         analyzeBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/portfolio/analyze', {
+            const response = await fetch(API_CONFIG.getApiUrl('/api/portfolio/analyze'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

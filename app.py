@@ -24,7 +24,17 @@ GITHUB_REPO_URL = f'https://github.com/{__github_owner__}/{__repo__}'
 LATEST_RELEASE_URL = f'{GITHUB_REPO_URL}/releases/latest'
 
 app = Flask(__name__)
-CORS(app)
+
+# CORS Configuration - Allow requests from any origin (for Railway deployment)
+# This allows the frontend (deployed separately or locally) to access the backend API
+CORS(app, resources={
+    r"/api/*": {
+        "origins": "*",  # Allow all origins - you can restrict this to specific domains in production
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"],
+        "supports_credentials": True
+    }
+})
 
 # Load configuration from environment variables
 DATABASE_PATH = os.getenv('DATABASE_PATH', 'Xion.db')

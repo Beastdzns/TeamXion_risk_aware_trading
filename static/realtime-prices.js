@@ -5,8 +5,8 @@ class RealtimePriceManager {
     constructor() {
         this.eventSource = null;
         this.useSSE = false; // Set to true to enable SSE streaming
-        this.realtimeEndpoint = '/api/market/prices/realtime';
-        this.streamEndpoint = '/api/market/stream';
+        this.realtimeEndpoint = API_CONFIG.getApiUrl('/api/market/prices/realtime');
+        this.streamEndpoint = API_CONFIG.getWsUrl('/api/market/stream');
     }
 
     /**
