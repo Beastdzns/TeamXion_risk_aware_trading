@@ -1,258 +1,358 @@
-# 📈 XION Trade Strategies
-
-A comprehensive paper-trading platform that lets you learn by doing—teaching you about investing, trading, risk management, markets, portfolio management, and a wide range of investment strategies using real market data, all without risking real money. XION Trade Strategies allows you to simulate trading across multiple strategies, from long-term investing to day trading, with real market data.
-
-## 🚀 Features
-
-### Core Functionality
-- **Paper Trading**: Simulate buy/sell orders without real money
-- **Portfolio Management**: Track multiple accounts and positions
-- **Real Market Data**: Integration with Yahoo Finance, Alpha Vantage, and Financial Modeling Prep
-- **Automated Trading Bot**: Background jobs for order processing and strategy execution
-- **Performance Analytics**: Track your gains/losses and portfolio performance
-
-### 30+ Investment Strategies
-XION Trade Strategies includes implementation templates for various trading strategies across multiple categories:
-
-#### Long Term Strategies
-- Buy & Hold
-- Index Fund Investing
-- Dollar-Cost Averaging (DCA)
-- Dividend Growth Investing
-- Value Investing
-- Growth Investing
-- Sector Rotation
-- Asset Allocation & Rebalancing
-
-#### Swing Trading
-- Trend Following
-- Breakout Trading
-- Momentum Trading
-- Mean Reversion
-- RSI Overbought/Oversold
-
-#### Day Trading
-- Scalping
-- VWAP Strategy
-- Opening Range Breakout
-- News-Based Trading
-
-#### Options Trading
-- Covered Calls
-- Cash-Secured Puts
-- Iron Condor
-
-#### Famous Investor Strategies
-- Warren Buffett (Value Investing)
-- Ben Graham (Deep Value)
-- Peter Lynch (GARP)
-- Ray Dalio (All Weather Portfolio)
-- Jesse Livermore (Trend & Breakout)
-- John Bogle (Passive Index)
-- Stanley Druckenmiller (Macro Trend)
-- Jim Simons (Quantitative Statistical Arbitrage)
-
-### AI-Powered Analysis
-- Stock analysis using AI
-- Trading strategy generation
-- Market insights and sector analysis
-- Multi-stock comparison
-
-## 🛠️ Tech Stack
-
-### Backend
-- **Framework**: FastAPI
-- **Database**: SQLite with SQLAlchemy ORM
-- **Task Scheduling**: APScheduler
-- **Market Data**: yfinance, alpha_vantage
-- **Python**: 3.x
-
-### Frontend
-- **Framework**: Vue 3
-- **Build Tool**: Vite
-- **UI**: Custom components
-
-## 📋 Prerequisites
-
-- Python 3.8 or higher
-
-## 🔧 Installation
-
-### 1. Clone or download the code
-```bash
-git clone <repository-url>
-cd paper_profit
-```
-
-### 2. Run the Application
-
-```bash
-./start.sh
-```
-
-This will:
-- Create and activate a virtual environment
-- Install dependencies
-- Run database migrations (if needed)
-- Start the FastAPI server on port 5000
-- Start background jobs for order processing and market data updates
-
-### 3. Open your browser 
-
-Go to http://localhost:5000
 
 
+# XION 
 
-### Manual Start
+### Continuous Agentic Trading, Risk Intelligence, and Strategy Simulation Platform
 
-#### Backend API
-```bash
-cd backend/app
-python api.py
-```
-API will be available at `http://localhost:5000`  
-API documentation at `http://localhost:5000/docs`
-
-#### Background Jobs
-```bash
-cd backend/app
-python background.py
-```
-
-#### Frontend Development Server
-```bash
-cd frontend
-npm run dev
-```
-Frontend will be available at `http://localhost:5173`
-
-## 📁 Project Structure
-
-```
-xion_trade_strategies/
-├── backend/
-│   ├── app/
-│   │   ├── api.py                    # FastAPI application
-│   │   ├── main.py                   # CLI entry point
-│   │   ├── background.py             # Background job scheduler
-│   │   ├── analysis/                 # Technical & fundamental analysis
-│   │   ├── config/                   # YAML configuration files
-│   │   ├── jobs/                     # Scheduled jobs
-│   │   │   ├── trading_bot.py        # Main trading bot logic
-│   │   │   ├── process_orders.py     # Order execution
-│   │   │   ├── update_market_data.py # Market data updates
-│   │   │   └── update_positions.py   # Position updates
-│   │   ├── octopus/                  # External service integrations
-│   │   │   ├── ai_platforms/         # AI service providers
-│   │   │   ├── brokers/              # Broker integrations
-│   │   │   └── data_providers/       # Market data providers
-│   │   ├── services/                 # Business logic
-│   │   ├── storage/                  # Database models & repositories
-│   │   ├── tests/                    # Unit tests
-│   │   └── utils/                    # Utility functions
-│   ├── requirements.txt              # Python dependencies
-│   └── XionTrade.db                 # SQLite database
-├── frontend/
-│   ├── src/
-│   │   ├── components/              # Vue components
-│   │   ├── App.vue                  # Root component
-│   │   └── main.js                  # Entry point
-│   ├── package.json                 # Node dependencies
-│   └── vite.config.js              # Vite configuration
-├── start.sh                         # Quick start script
-└── README.md                        # This file
-```
-
-## 🔌 API Endpoints
-
-### Accounts
-- `GET /api/accounts` - List all accounts
-- `POST /api/accounts` - Create new account
-- `GET /api/accounts/{id}` - Get account details
-- `PUT /api/accounts/{id}` - Update account
-- `GET /api/accounts/{id}/summary` - Account summary with positions
-- `GET /api/accounts/{id}/portfolio` - Portfolio holdings
-- `GET /api/accounts/{id}/performance` - Performance metrics
-- `POST /api/accounts/{id}/buy` - Create buy order
-- `POST /api/accounts/{id}/sell` - Create sell order
-
-### Strategies
-- `GET /api/strategies` - List all strategies
-- `POST /api/strategies` - Create new strategy
-- `GET /api/strategies/{id}` - Get strategy details
-- `PUT /api/strategies/{id}` - Update strategy
-
-### Instruments
-- `GET /api/instruments/search?query={q}` - Search for stocks
-- `GET /api/instruments/get/{symbol}` - Get instrument details
-- `GET /api/instruments/{symbol}/market-data?period={p}` - Historical data
-
-### AI Analysis
-- `POST /api/ai/analyze-stock` - AI-powered stock analysis
-- `POST /api/ai/generate-strategy` - Generate trading strategy
-- `GET /api/ai/market-insights` - Market insights
-- `POST /api/ai/compare-stocks` - Compare multiple stocks
-
-### Configuration
-- `GET /api/settings` - Get settings
-- `GET /api/service-list` - Get service list
-- `GET /api/strategy-list` - Get strategy templates
-- `GET /api/guide` - Investment guide
-
-## ⚙️ Configuration
-
-### Strategy Configuration
-Edit strategy templates in:
-- `backend/app/config/strategy-list.yaml`
-- `backend/app/config/strategy-parameters.yaml`
-
-### Service Settings
-Configure data providers and services in:
-- `backend/app/config/service-list-settings.yaml`
-
-## 📊 Background Jobs
-
-The application runs several scheduled jobs:
-
-1. **Trading Bot** - Executes strategies and generates signals
-2. **Process Orders** - Processes pending orders
-3. **Update Market Data** - Fetches latest market prices
-4. **Update Positions** - Updates position valuations
-
-## 🔐 Database
-
-XION Trade Strategies uses SQLite for simplicity. The database is automatically created and migrated on first run.
-
-### Manual Migration
-```bash
-cd backend/app
-python main.py migrate
-```
-
-## 📝 License
-
-This project is for educational purposes. Use at your own risk. Past performance does not guarantee future results.
-
-## ⚠️ Disclaimer
-
-XION Trade Strategies is a **simulation platform** for educational purposes only. It does not execute real trades. Always do your own research and consult with financial advisors before making real investment decisions.
-
-## 🐛 Known Issues
-
-- Market data is delayed (not real-time)
-- Some advanced options strategies are templates only
-- AI features require API key
-
-## 🗺️ Roadmap
-
-- [ ] More broker integrations
-- [ ] Advanced charting and technical indicators
-- [ ] Risk management tools
-
-## 📞 Support
-
-For issues, questions, or contributions, please open an issue on GitHub.
+**Status**: Research / Simulation
+**License**: MIT
+**Use Case**: Education, portfolio intelligence, strategy research
+**Warning**: Not financial advice. Do not use with real capital.
 
 ---
 
-Made with ❤️ for traders and investors learning the markets.
+## 1. Overview
+
+XION ONE is an **advanced agentic trading and portfolio intelligence system** designed to solve a fundamental flaw in traditional trading systems:
+
+> Trading is not a single decision. It is a continuous decision-making process under uncertainty, risk constraints, and capital limitations.
+
+Unlike conventional buy/sell bots or isolated strategy engines, XION ONE operates as a **continuous reasoning agent** that:
+
+* Actively manages open positions
+* Rebalances capital dynamically
+* Evaluates portfolio-wide risk at every step
+* Explains decisions using large language models
+* Simulates institutional-grade risk controls
+
+---
+
+## 2. Core Philosophy
+
+Traditional systems:
+
+* Treat trades independently
+* Stop reasoning after execution
+* Ignore opportunity cost
+* Manage risk per position
+
+XION ONE:
+
+* Treats the **portfolio as a living system**
+* Re-evaluates decisions continuously
+* Manages **capital efficiency**
+* Optimizes **risk-adjusted outcomes**
+
+---
+
+## 3. High-Level System Architecture
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                         Interfaces                            │
+│                                                              │
+│  Web Dashboard        Telegram Bot        Mini App        API │
+│      (Flask)        (python-telegram)    (Vue)         (REST)│
+└───────────────┬───────────────┬───────────────┬─────────────┘
+                │               │               │
+                └───────────────┴───────────────┴─────────────┐
+                                                                │
+┌───────────────────────────────────────────────────────────────▼──────────┐
+│                             CORE ENGINE                                   │
+│                                                                            │
+│  ┌──────────────┐   ┌──────────────┐   ┌──────────────────────────────┐  │
+│  │ Market Data  │ → │ Risk Engine  │ → │ Strategy Intelligence Layer   │  │
+│  └──────────────┘   └──────────────┘   └───────────────┬──────────────┘  │
+│                                                          │                 │
+│                              ┌──────────────────────────▼──────────────┐ │
+│                              │        Agentic AI Reasoner                │ │
+│                              │   (OpenAI / Claude / DeepSeek / LLMs)     │ │
+│                              └──────────────────────────┬──────────────┘ │
+│                                                          │                 │
+│                              ┌──────────────────────────▼──────────────┐ │
+│                              │     Trading & Portfolio Engine            │ │
+│                              │  (Simulation, Fees, Positions, Capital)  │ │
+│                              └──────────────────────────┬──────────────┘ │
+│                                                          │                 │
+│                              ┌──────────────────────────▼──────────────┐ │
+│                              │          State Storage (SQLite)           │ │
+│                              └──────────────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 4. Continuous Decision Loop
+
+XION ONE runs as a **closed-loop decision system**.
+
+```
+Market Data Update
+        ↓
+Portfolio State Load
+        ↓
+Risk Assessment (Exposure, VaR, Drawdown)
+        ↓
+Strategy Signal Aggregation
+        ↓
+LLM-Based Reasoning
+        ↓
+Action Decision
+(Hold / Reduce / Exit / Reallocate)
+        ↓
+Simulated Trade Execution
+        ↓
+Portfolio Update + Logging
+        ↓
+Repeat at Configured Frequency
+```
+
+This loop never stops while the market is active.
+
+---
+
+## 5. Agentic AI Reasoning
+
+The AI does not generate raw signals blindly.
+
+It receives structured inputs:
+
+* Current portfolio state
+* Capital allocation
+* Risk metrics
+* Strategy outputs
+* Trading costs
+* Market regime
+
+And produces:
+
+* Action decision
+* Position sizing
+* Risk justification
+* Natural-language explanation
+
+### Example Reasoning Output
+
+```
+Decision: Reduce position
+Asset: TSLA
+Reason:
+- Portfolio tech exposure exceeds 28%
+- Volatility spike detected
+- Opportunity cost favors defensive allocation
+Action:
+- Reduce position by 30%
+- Preserve capital for reallocation
+```
+
+---
+
+## 6. Risk Intelligence Engine
+
+### Supported Metrics
+
+* Portfolio beta
+* Value at Risk (VaR)
+* Sharpe ratio
+* Maximum drawdown
+* Sector exposure
+* Position concentration
+* Capital utilization
+
+### Risk Constraints
+
+* Max single position exposure
+* Max sector exposure
+* Mandatory stop-loss
+* Capital lock limits
+* Fee-aware execution
+
+Risk is evaluated **before every decision**.
+
+---
+
+## 7. Strategy Intelligence Layer
+
+XION ONE includes **30+ strategies**, but strategies do not execute trades directly.
+
+They provide **signals**, which the agent evaluates.
+
+### Strategy Categories
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Strategy Intelligence                                         │
+├───────────────────┬───────────────────┬─────────────────────┤
+│ Long-Term         │ Swing Trading     │ Intraday            │
+│                   │                   │                     │
+│ Value Investing   │ Trend Following   │ Scalping            │
+│ Buy & Hold        │ Breakouts         │ VWAP                │
+│ DCA               │ Momentum          │ Opening Range       │
+│ Dividend          │ Mean Reversion    │ News-Based          │
+│ Index Models      │ RSI               │ Intraday Trends     │
+├───────────────────┴───────────────────┴─────────────────────┤
+│ Legendary Investors                                           │
+│ Buffett, Graham, Lynch, Dalio, Livermore, Bogle               │
+└──────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 8. Multi-Model AI Support
+
+Supported AI providers:
+
+* OpenAI (GPT-4, GPT-4.1, GPT-3.5)
+* Claude (via OpenRouter)
+* DeepSeek
+* Any OpenAI-compatible API
+
+You can run **multiple AI models simultaneously** and compare reasoning quality and outcomes.
+
+---
+
+## 9. Interfaces
+
+### 9.1 Web Dashboard
+
+* Portfolio overview
+* Position tracking
+* PnL analytics
+* Risk visualizations
+* Decision logs
+
+### 9.2 Telegram Bot
+
+* Price lookup
+* AI analysis
+* Strategy execution
+* Risk summaries
+
+### 9.3 Telegram Mini App
+
+* Full trading terminal UI
+* Charts
+* Portfolio management
+* Trade simulation
+
+### 9.4 REST API
+
+* OpenAPI documented
+* Strategy access
+* Portfolio state
+* AI analysis endpoints
+
+---
+
+## 10. Repository Structure
+
+```
+xion-one/
+├── core/
+│   ├── agent/
+│   ├── strategies/
+│   ├── trading/
+│   └── risk/
+├── data/
+├── api/
+├── dashboard/
+├── telegram/
+├── database/
+├── config/
+├── docker/
+├── scripts/
+├── requirements.txt
+├── README.md
+└── LICENSE
+```
+
+---
+
+## 11. API Example
+
+### Request
+
+```
+POST /api/ai/analyze-stock
+{
+  "symbol": "AAPL",
+  "strategy": "momentum",
+  "portfolio_id": 1
+}
+```
+
+### Response
+
+```
+{
+  "signal": "BUY",
+  "confidence": 84,
+  "entry_price": 185.50,
+  "stop_loss": 176.20,
+  "target_price": 210.00,
+  "position_size": "4%",
+  "reasoning": [
+    "Breakout above resistance",
+    "Portfolio risk remains within limits",
+    "Positive momentum confirmation"
+  ]
+}
+```
+
+---
+
+## 12. Local Setup
+
+### Backend
+
+```
+pip install -r requirements.txt
+python dashboard/app.py
+```
+
+### API
+
+```
+uvicorn api.main:app --reload
+```
+
+### Telegram Bot
+
+```
+python telegram/bot.py
+```
+
+---
+
+## 13. Safety and Disclaimer
+
+* No real asset trading
+* No broker connectivity
+* All trades are simulated
+* Educational and research use only
+
+Developers assume no responsibility for financial outcomes.
+
+---
+
+## 14. Project Positioning
+
+XION ONE is:
+
+* A research-grade trading intelligence system
+* A portfolio reasoning framework
+* A production Grade multi LLM system 
+
+XION ONE is not:
+
+* A signal-selling platform
+* A money-making bot
+* A replacement for professional financial advice
+
+---
+
+## 15. License
+
+MIT License. See `LICENSE` for details.
+
+---
