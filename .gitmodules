@@ -1,0 +1,3 @@
+[submodule "telemini"]
+	path = telemini
+	url = https://github.com/SHLOK333/xion-trade-miniapp.git
