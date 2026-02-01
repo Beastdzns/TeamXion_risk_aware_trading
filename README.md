@@ -26,6 +26,7 @@ XION TRADE implements an **AI-powered agent** that actively manages open positio
 ✅ **Intelligent Reasoning** - Uses LLMs to analyze and explain every decision, not fixed indicators
 
 **This is NOT a simple buy/sell bot—it's continuous, reasoning-based portfolio management.**
+<img width="3470" height="1045" alt="image" src="https://github.com/user-attachments/assets/819eceb4-c432-4c08-bdce-22cb9da257e9" />
 
 ---
 
